@@ -1,51 +1,25 @@
-from PIL import Image
+#Importing the library
+import matplotlib.pyplot as plt
+import keras_ocr
 
-import pytesseract
+# keras-ocr will automatically download pretrained
+# weights for the detector and recognizer.
+pipeline = keras_ocr.pipeline.Pipeline()
 
-# If you don't have tesseract executable in your PATH, include the following:
-pytesseract.pytesseract.tesseract_cmd = r'<full_path_to_your_tesseract_executable>'
-# Example tesseract_cmd = r'C:\Program Files (x86)\Tesseract-OCR\tesseract'
+# Get a set of three example images
+images = [
+    keras_ocr.tools.read(url) for url in [
+        'https://upload.wikimedia.org/wikipedia/commons/b/bd/Army_Reserves_Recruitment_Banner_MOD_45156284.jpg',
+        'https://upload.wikimedia.org/wikipedia/commons/e/e8/FseeG2QeLXo.jpg',
+        'https://upload.wikimedia.org/wikipedia/commons/b/b4/EUBanana-500x112.jpg'
+    ]
+]
 
-# Simple image to string
-print(pytesseract.image_to_string(Image.open('test.png')))
+# Each list of predictions in prediction_groups is a list of
+# (word, box) tuples.
+prediction_groups = pipeline.recognize(images)
 
-# In order to bypass the image conversions of pytesseract, just use relative or absolute image path
-# NOTE: In this case you should provide tesseract supported images or tesseract will return error
-print(pytesseract.image_to_string('test.png'))
-
-# List of available languages
-print(pytesseract.get_languages(config=''))
-
-# French text image to string
-print(pytesseract.image_to_string(Image.open('let.jpg'), lang='fra'))
-
-# Batch processing with a single file containing the list of multiple image file paths
-print(pytesseract.image_to_string('images.txt'))
-
-# Timeout/terminate the tesseract job after a period of time
-try:
-    print(pytesseract.image_to_string('test.jpg', timeout=2)) # Timeout after 2 seconds
-    print(pytesseract.image_to_string('test.jpg', timeout=0.5)) # Timeout after half a second
-except RuntimeError as timeout_error:
-    # Tesseract processing is terminated
-    pass
-
-# Get bounding box estimates
-print(pytesseract.image_to_boxes(Image.open('test.png')))
-
-# Get verbose data including boxes, confidences, line and page numbers
-print(pytesseract.image_to_data(Image.open('test.png')))
-
-# Get information about orientation and script detection
-print(pytesseract.image_to_osd(Image.open('test.png')))
-
-# Get a searchable PDF
-pdf = pytesseract.image_to_pdf_or_hocr('test.png', extension='pdf')
-with open('test.pdf', 'w+b') as f:
-    f.write(pdf) # pdf type is bytes by default
-
-# Get HOCR output
-hocr = pytesseract.image_to_pdf_or_hocr('test.png', extension='hocr')
-
-# Get ALTO XML output
-xml = pytesseract.image_to_alto_xml('test.png')
+# Plot the predictions
+fig, axs = plt.subplots(nrows=len(images), figsize=(20, 20))
+for ax, image, predictions in zip(axs, images, prediction_groups):
+    keras_ocr.tools.drawAnnotations(image=image, predictions=predictions, ax=ax)
