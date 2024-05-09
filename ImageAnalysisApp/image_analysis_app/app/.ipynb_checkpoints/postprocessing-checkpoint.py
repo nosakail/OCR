@@ -1,3 +1,17 @@
+import easyocr
+import cv2
+import numpy as np
+import streamlit as st
+from io import BytesIO
+
+
+# Download the fixed image
+def convert_image(img):
+    buf = BytesIO()
+    img.save(buf, format="PNG")
+    byte_im = buf.getvalue()
+    return byte_im
+    
 #keep best ocr result and show image
 def apply_best_result(img_path, imp_img_path):
     
@@ -50,12 +64,12 @@ def apply_best_result(img_path, imp_img_path):
         return annotated_img
 
 
-def show(base_img, res_img):
+def show(base_img, res_img, col1, col2):
     col1.write("Original Image :camera:")
     col1.image(base_img)
 
     col2.write("Fixed Image :wrench:")
     col2.image(res_img)
     st.sidebar.markdown("\n")
-    st.sidebar.download_button("Download the result", convert_image(res_img), "your_result_image.png", "image/png")
+    #st.sidebar.download_button("Download the result", convert_image(res_img), "your_result_image.png", "image/png")
 

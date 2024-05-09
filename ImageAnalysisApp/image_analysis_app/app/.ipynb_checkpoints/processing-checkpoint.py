@@ -1,6 +1,8 @@
 import cv2
 import os
-
+from preprocessing import get_saturation 
+from preprocessing import is_background_darkened 
+from preprocessing import is_low_contrast
 
 #if background is not darkened
 def process_not_darkened_background(img_path):

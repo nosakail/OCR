@@ -1,6 +1,6 @@
 from colorthief import ColorThief
 import cv2
-
+import numpy as np
 
 
 #determine if background is darkened

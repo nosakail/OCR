@@ -2,7 +2,12 @@ import streamlit as st
 import os
 import postprocessing
 import time
+from processing import improve_image
+from postprocessing import apply_best_result
+from postprocessing import show 
+from PIL import Image
 
+    
 st.set_page_config(layout="wide", page_title="Image analysis using OCR")
 
 st.write("## Find text in your image ")
@@ -25,8 +30,16 @@ with open(file_name, "wb") as f:
     f.write(my_upload.getbuffer())
 img_path = os.path.abspath(file_name)
 
-improve_image(img_path)
-imp_img_path = os.path.join(img_to_process_dir, file_name + '_result.png')
+file_name_without_extension = os.path.splitext(os.path.basename(file_name))[0]
 
-res_image = apply_best_result(img_path, imp_img_path)
-show(base_img, res_img)
+improve_image(img_path)
+imp_img_path = os.path.join(img_to_process_dir, file_name_without_extension + '_result.png')
+
+print(imp_img_path)
+print(img_path)
+#print(file_name)
+#print(file_name_without_extension)
+base_img = Image.open(img_path)
+
+res_img = apply_best_result(img_path, imp_img_path)
+show(base_img, res_img, col1, col2)
