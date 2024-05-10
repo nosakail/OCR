@@ -24,22 +24,39 @@ my_upload = st.sidebar.file_uploader("Upload an image", type=["png", "jpg", "jpe
 upload_dir = 'uploaded_image'
 img_to_process_dir = 'img_to_process'
 
-# Générer un nom unique pour l'image
-file_name = os.path.join(upload_dir, f"image_{int(time.time())}.{my_upload.name.split('.')[-1]}")
-with open(file_name, "wb") as f:
-    f.write(my_upload.getbuffer())
-img_path = os.path.abspath(file_name)
+if my_upload == None:
+    col1.markdown('<p style="font-size:24px;">Please, put an image</p>', unsafe_allow_html=True)
+else :
+    progress_bar = st.progress(0)
+    
+    # Générer un nom unique pour l'image
+    file_name = os.path.join(upload_dir, f"image_{int(time.time())}.{my_upload.name.split('.')[-1]}")
+    with open(file_name, "wb") as f:
+        f.write(my_upload.getbuffer())
+    img_path = os.path.abspath(file_name)
 
-file_name_without_extension = os.path.splitext(os.path.basename(file_name))[0]
+    progress_bar.progress(33)
+    
+    file_name_without_extension = os.path.splitext(os.path.basename(file_name))[0]
+    
+    improve_image(img_path)
+    imp_img_path = os.path.join(img_to_process_dir, file_name_without_extension + '_result.png')
+    
+    print(imp_img_path)
+    print(img_path)
+    #print(file_name)
+    #print(file_name_without_extension)
+    base_img = Image.open(img_path)
 
-improve_image(img_path)
-imp_img_path = os.path.join(img_to_process_dir, file_name_without_extension + '_result.png')
+    progress_bar.progress(66)
+    
+    res_img = apply_best_result(img_path, imp_img_path)
+    
+    progress_bar.progress(90)
+    
+    show(base_img, res_img, col1, col2)
 
-print(imp_img_path)
-print(img_path)
-#print(file_name)
-#print(file_name_without_extension)
-base_img = Image.open(img_path)
+    progress_bar.progress(100)
 
-res_img = apply_best_result(img_path, imp_img_path)
-show(base_img, res_img, col1, col2)
+    
+    progress_bar.empty()
