@@ -6,7 +6,13 @@ from processing import improve_image
 from postprocessing import apply_best_result
 from postprocessing import show 
 from PIL import Image
+#import cv2
 
+def delete_files_in_directory(directory):
+    for filename in os.listdir(directory):
+        file_path = os.path.join(directory, filename)
+        if os.path.isfile(file_path):
+            os.remove(file_path)
     
 st.set_page_config(layout="wide", page_title="Image analysis using OCR")
 
@@ -25,9 +31,22 @@ upload_dir = 'uploaded_image'
 img_to_process_dir = 'img_to_process'
 
 if my_upload == None:
-    col1.markdown('<p style="font-size:24px;">Please, put an image</p>', unsafe_allow_html=True)
+    base_img = Image.open('img_example/image002.jpg')
+    imp_img = Image.open('img_example/ocr_result.png')
+    
+    col1.write("Original Image :camera:")
+    col1.image(base_img)
+    col2.write("Fixed Image :wrench:")
+    col2.image(imp_img)
+    col1.markdown('<p style="font-size:24px;">Try with your image &#x2B06;</p>', unsafe_allow_html=True)
+
+    
+    
 else :
     progress_bar = st.progress(0)
+
+    delete_files_in_directory(upload_dir)
+    delete_files_in_directory(img_to_process_dir)
     
     # Générer un nom unique pour l'image
     file_name = os.path.join(upload_dir, f"image_{int(time.time())}.{my_upload.name.split('.')[-1]}")

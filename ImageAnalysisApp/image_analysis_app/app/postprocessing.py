@@ -3,14 +3,8 @@ import cv2
 import numpy as np
 import streamlit as st
 from io import BytesIO
+from PIL import Image
 
-
-# Download the fixed image
-def convert_image(img):
-    buf = BytesIO()
-    img.save(buf, format="PNG")
-    byte_im = buf.getvalue()
-    return byte_im
     
 #keep best ocr result and show image
 def apply_best_result(img_path, imp_img_path):
@@ -64,12 +58,25 @@ def apply_best_result(img_path, imp_img_path):
         return annotated_img
 
 
-def show(base_img, res_img, col1, col2):
+
+# Download the fixed image
+def convert_image(img_array):
+    img_pil = Image.fromarray(img_array)
+    buf = BytesIO()
+    img_pil.save(buf, format="PNG")
+    byte_im = buf.getvalue()
+    return byte_im
+    
+def show(base_img, res_img_array, col1, col2):
     col1.write("Original Image :camera:")
     col1.image(base_img)
 
     col2.write("Fixed Image :wrench:")
-    col2.image(res_img)
+    # Convertir le tableau NumPy en une image PIL pour l'afficher
+    res_img_pil = Image.fromarray(res_img_array)
+    col2.image(res_img_pil)
     st.sidebar.markdown("\n")
-    #st.sidebar.download_button("Download the result", convert_image(res_img), "your_result_image.png", "image/png")
+    # Appeler la fonction convert_image() avec le tableau NumPy
+    st.sidebar.download_button("Download the result", convert_image(res_img_array), "your_result_image.png", "image/png")
+
 
