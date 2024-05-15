@@ -61,10 +61,10 @@ def improve_image(img_path):
     
     if get_saturation(img_path) > 127.23:
         if is_background_darkened(img_path):
-            img = process_background_darkened(img_path)
+            img = process_background_darkened(ajust_hight_saturation(img_path)[1])
             cv2.imwrite(new_img_path, img)
         else : 
-            img = process_not_darkened_background(img_path)
+            img = process_not_darkened_background(ajust_hight_saturation(img_path)[1])
             cv2.imwrite(new_img_path, img)
     else : 
         if is_low_contrast(img_path):
