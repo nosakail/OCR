@@ -68,7 +68,7 @@ def show(base_img, res_img_array, col1, col2):
     col2.image(res_img_pil)
     st.sidebar.markdown("\n")
     # Call convert fonction with numpy array
-    st.sidebar.download_button("Download the result", convert_image(res_img_array), "your_result_image.png", "image/png")
+    st.sidebar.download_button("Download result", convert_image(res_img_array), "your_result_image.png", "image/png")
 
 
 def dark_back(img_path):

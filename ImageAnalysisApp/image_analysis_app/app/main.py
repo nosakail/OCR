@@ -32,7 +32,7 @@ col1, col2 = st.columns(2)
 
 st.sidebar.write("## Upload and download :gear:")
 
-options = ["Model Analysis (recommended)", "Dark Background", "Light Background", "Hight Saturation", "Low Contrast"]
+options = ["Model Analysis", "Dark Background", "Light Background", "Hight Saturation", "Low Contrast"]
 selected_option = st.sidebar.selectbox("Choisissez une option", options)
 
 
@@ -55,7 +55,7 @@ if my_upload == None or selected_option == None:
     
     
 else :
-    if selected_option == "Model Analysis (recommended)":
+    if selected_option == "Model Analysis":
         progress_bar = st.progress(0)
     
         delete_files_in_directory(upload_dir)
