@@ -1,5 +1,6 @@
 import easyocr
 import cv2
+import time
 
 # Charger l'image
 image = cv2.imread('DOTL.jpg')
