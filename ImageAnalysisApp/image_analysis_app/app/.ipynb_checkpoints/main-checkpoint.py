@@ -54,129 +54,132 @@ if my_upload == None or selected_option == None:
 
     
     
-else :
-    if selected_option == "Model Analysis":
-        progress_bar = st.progress(0)
+else  :
+    if my_upload.size > MAX_FILE_SIZE:
+        st.error("The uploaded file is too large. Please upload an image smaller than 5MB.")
+    else:
+        if selected_option == "Model Analysis":
+            progress_bar = st.progress(0)
+        
+            delete_files_in_directory(upload_dir)
+            delete_files_in_directory(img_to_process_dir)
+            
+            # get specific image name
+            file_name = os.path.join(upload_dir, f"image_{int(time.time())}.{my_upload.name.split('.')[-1]}")
+            with open(file_name, "wb") as f:
+                f.write(my_upload.getbuffer())
+            img_path = os.path.abspath(file_name)
+        
+            progress_bar.progress(33)
+            
+            file_name_without_extension = os.path.splitext(os.path.basename(file_name))[0]
+            
+            improve_image(img_path)
+            imp_img_path = os.path.join(img_to_process_dir, file_name_without_extension + '_result.png')
+            
+            print(imp_img_path)
+            print(img_path)
+            #print(file_name)
+            #print(file_name_without_extension)
+            base_img = Image.open(img_path)
+        
+            progress_bar.progress(66)
+            
+            res_img = apply_best_result(img_path, imp_img_path)
+            
+            progress_bar.progress(90)
+            
+            show(base_img, res_img, col1, col2)
+        
+            progress_bar.progress(100)
+            progress_bar.empty()
     
-        delete_files_in_directory(upload_dir)
-        delete_files_in_directory(img_to_process_dir)
+        if selected_option == "Dark Background":
+            progress_bar = st.progress(0)
+            delete_files_in_directory(upload_dir)
+            delete_files_in_directory(img_to_process_dir)
+            
+            file_name = os.path.join(upload_dir, f"image_{int(time.time())}.{my_upload.name.split('.')[-1]}")
+            with open(file_name, "wb") as f:
+                f.write(my_upload.getbuffer())
+            img_path = os.path.abspath(file_name)
+            
+            progress_bar.progress(33)
+            file_name_without_extension = os.path.splitext(os.path.basename(file_name))[0]
+            img = dark_back(img_path)
+            base_img = Image.open(img_path)
+            progress_bar.progress(66)
+            
+            progress_bar.progress(90)
+            show(base_img, img, col1, col2)
         
-        # get specific image name
-        file_name = os.path.join(upload_dir, f"image_{int(time.time())}.{my_upload.name.split('.')[-1]}")
-        with open(file_name, "wb") as f:
-            f.write(my_upload.getbuffer())
-        img_path = os.path.abspath(file_name)
+            progress_bar.progress(100)
+            progress_bar.empty()
     
-        progress_bar.progress(33)
+        if selected_option == "Light Background":
+            progress_bar = st.progress(0)
+            delete_files_in_directory(upload_dir)
+            delete_files_in_directory(img_to_process_dir)
+            
+            file_name = os.path.join(upload_dir, f"image_{int(time.time())}.{my_upload.name.split('.')[-1]}")
+            with open(file_name, "wb") as f:
+                f.write(my_upload.getbuffer())
+            img_path = os.path.abspath(file_name)
+            
+            progress_bar.progress(33)
+            file_name_without_extension = os.path.splitext(os.path.basename(file_name))[0]
+            img = light_back(img_path)
+            base_img = Image.open(img_path)
+            progress_bar.progress(66)
+            
+            progress_bar.progress(90)
+            show(base_img, img, col1, col2)
         
-        file_name_without_extension = os.path.splitext(os.path.basename(file_name))[0]
+            progress_bar.progress(100)
+            progress_bar.empty() 
+            
+        if selected_option == "Hight Saturation":
+            progress_bar = st.progress(0)
+            delete_files_in_directory(upload_dir)
+            delete_files_in_directory(img_to_process_dir)
+            
+            file_name = os.path.join(upload_dir, f"image_{int(time.time())}.{my_upload.name.split('.')[-1]}")
+            with open(file_name, "wb") as f:
+                f.write(my_upload.getbuffer())
+            img_path = os.path.abspath(file_name)
+            
+            progress_bar.progress(33)
+            file_name_without_extension = os.path.splitext(os.path.basename(file_name))[0]
+            img = hight_saturation(img_path)
+            base_img = Image.open(img_path)
+            progress_bar.progress(66)
+            
+            progress_bar.progress(90)
+            show(base_img, img, col1, col2)
         
-        improve_image(img_path)
-        imp_img_path = os.path.join(img_to_process_dir, file_name_without_extension + '_result.png')
-        
-        print(imp_img_path)
-        print(img_path)
-        #print(file_name)
-        #print(file_name_without_extension)
-        base_img = Image.open(img_path)
+            progress_bar.progress(100)
+            progress_bar.empty() 
     
-        progress_bar.progress(66)
+        if selected_option == "Low Contrast":
+            progress_bar = st.progress(0)
+            delete_files_in_directory(upload_dir)
+            delete_files_in_directory(img_to_process_dir)
+            
+            file_name = os.path.join(upload_dir, f"image_{int(time.time())}.{my_upload.name.split('.')[-1]}")
+            with open(file_name, "wb") as f:
+                f.write(my_upload.getbuffer())
+            img_path = os.path.abspath(file_name)
+            
+            progress_bar.progress(33)
+            file_name_without_extension = os.path.splitext(os.path.basename(file_name))[0]
+            img = low_contrast(img_path)
+            base_img = Image.open(img_path)
+            progress_bar.progress(66)
+            
+            progress_bar.progress(90)
+            show(base_img, img, col1, col2)
         
-        res_img = apply_best_result(img_path, imp_img_path)
-        
-        progress_bar.progress(90)
-        
-        show(base_img, res_img, col1, col2)
-    
-        progress_bar.progress(100)
-        progress_bar.empty()
-
-    if selected_option == "Dark Background":
-        progress_bar = st.progress(0)
-        delete_files_in_directory(upload_dir)
-        delete_files_in_directory(img_to_process_dir)
-        
-        file_name = os.path.join(upload_dir, f"image_{int(time.time())}.{my_upload.name.split('.')[-1]}")
-        with open(file_name, "wb") as f:
-            f.write(my_upload.getbuffer())
-        img_path = os.path.abspath(file_name)
-        
-        progress_bar.progress(33)
-        file_name_without_extension = os.path.splitext(os.path.basename(file_name))[0]
-        img = dark_back(img_path)
-        base_img = Image.open(img_path)
-        progress_bar.progress(66)
-        
-        progress_bar.progress(90)
-        show(base_img, img, col1, col2)
-    
-        progress_bar.progress(100)
-        progress_bar.empty()
-
-    if selected_option == "Light Background":
-        progress_bar = st.progress(0)
-        delete_files_in_directory(upload_dir)
-        delete_files_in_directory(img_to_process_dir)
-        
-        file_name = os.path.join(upload_dir, f"image_{int(time.time())}.{my_upload.name.split('.')[-1]}")
-        with open(file_name, "wb") as f:
-            f.write(my_upload.getbuffer())
-        img_path = os.path.abspath(file_name)
-        
-        progress_bar.progress(33)
-        file_name_without_extension = os.path.splitext(os.path.basename(file_name))[0]
-        img = light_back(img_path)
-        base_img = Image.open(img_path)
-        progress_bar.progress(66)
-        
-        progress_bar.progress(90)
-        show(base_img, img, col1, col2)
-    
-        progress_bar.progress(100)
-        progress_bar.empty() 
-        
-    if selected_option == "Hight Saturation":
-        progress_bar = st.progress(0)
-        delete_files_in_directory(upload_dir)
-        delete_files_in_directory(img_to_process_dir)
-        
-        file_name = os.path.join(upload_dir, f"image_{int(time.time())}.{my_upload.name.split('.')[-1]}")
-        with open(file_name, "wb") as f:
-            f.write(my_upload.getbuffer())
-        img_path = os.path.abspath(file_name)
-        
-        progress_bar.progress(33)
-        file_name_without_extension = os.path.splitext(os.path.basename(file_name))[0]
-        img = hight_saturation(img_path)
-        base_img = Image.open(img_path)
-        progress_bar.progress(66)
-        
-        progress_bar.progress(90)
-        show(base_img, img, col1, col2)
-    
-        progress_bar.progress(100)
-        progress_bar.empty() 
-
-    if selected_option == "Low Contrast":
-        progress_bar = st.progress(0)
-        delete_files_in_directory(upload_dir)
-        delete_files_in_directory(img_to_process_dir)
-        
-        file_name = os.path.join(upload_dir, f"image_{int(time.time())}.{my_upload.name.split('.')[-1]}")
-        with open(file_name, "wb") as f:
-            f.write(my_upload.getbuffer())
-        img_path = os.path.abspath(file_name)
-        
-        progress_bar.progress(33)
-        file_name_without_extension = os.path.splitext(os.path.basename(file_name))[0]
-        img = low_contrast(img_path)
-        base_img = Image.open(img_path)
-        progress_bar.progress(66)
-        
-        progress_bar.progress(90)
-        show(base_img, img, col1, col2)
-    
-        progress_bar.progress(100)
-        progress_bar.empty()
+            progress_bar.progress(100)
+            progress_bar.empty()
         
 
