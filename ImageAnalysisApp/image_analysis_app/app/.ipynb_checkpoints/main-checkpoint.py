@@ -12,12 +12,19 @@ from postprocessing import low_contrast
 from postprocessing import hight_saturation
 
 #import cv2
-
 def delete_files_in_directory(directory):
     for filename in os.listdir(directory):
         file_path = os.path.join(directory, filename)
         if os.path.isfile(file_path):
             os.remove(file_path)
+            
+# Download the fixed image
+def convert_image(img_array):
+    img_pil = Image.fromarray(img_array)
+    buf = BytesIO()
+    img_pil.save(buf, format="PNG")
+    byte_im = buf.getvalue()
+    return byte_im
             
 MAX_FILE_SIZE = 5 * 1024 * 1024  # 5MB
 
@@ -33,7 +40,7 @@ col1, col2 = st.columns(2)
 st.sidebar.write("## Upload and download :gear:")
 
 options = ["Model Analysis", "Dark Background", "Light Background", "Hight Saturation", "Low Contrast"]
-selected_option = st.sidebar.selectbox("Choisissez une option", options)
+selected_option = st.sidebar.selectbox("Choose an option", options)
 
 
 
@@ -93,7 +100,7 @@ else  :
         
             progress_bar.progress(100)
             progress_bar.empty()
-    
+
         if selected_option == "Dark Background":
             progress_bar = st.progress(0)
             delete_files_in_directory(upload_dir)

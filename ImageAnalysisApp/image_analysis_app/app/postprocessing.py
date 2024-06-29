@@ -57,6 +57,7 @@ def convert_image(img_array):
     img_pil.save(buf, format="PNG")
     byte_im = buf.getvalue()
     return byte_im
+
     
 def show(base_img, res_img_array, col1, col2):
     col1.write("Original Image :camera:")
